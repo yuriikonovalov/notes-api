@@ -10,6 +10,12 @@ const jwtVerifier = CognitoJwtVerifier.create({
 })
 
 const generatePolicy = (principalId, effect, resource) => {
+    // Lambda Authorizer cache issue workaround
+    var tmp = resource.split(":")
+    var apiGatewayArnTmp = tmp[5].split("/")
+    var resource = tmp[0] + ":" + tmp[1] + ":" + tmp[2] + ":" + tmp[3] + ":" + tmp[4] + ":" + apiGatewayArnTmp[0] + "/*/*"
+
+
     // IAM Policy
     var authResponse = {};
     authResponse.principalId = principalId;
